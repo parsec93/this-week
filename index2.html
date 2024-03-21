@@ -13,6 +13,7 @@
     .horizontal{
         display: flex;
         align-items: center;
+        margin-bottom: 10px;
     }
     .horizontal h3{
         display: inline-flex;
@@ -113,22 +114,59 @@
     <style>
 .season-section{
     width:100%;
-    height: 300px;
+    height: auto;
     border: 1px solid #dbdbdb;
     background-color: #eeeeee;
+    padding: 10px;
 }
 .season-div{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
+}
+.season-div div{
+    display: flex;
+}
+.season-div div strong {
+    min-width: 60px;
+}
+.season-div div .title{
+    min-width: 100px;
+}
+@media screen and (max-width: 767px){
+    .season-div{
+        display: flex;
+        flex-direction: column;
+    }   
 }
     </style>
     <section class="season-section">
-        <h3>연중</h3>
-        <div class="season-div">
-            <div>입당<span class="num">123</span> - <span class="title">주께 가오니</span></div>
-            <div>예물준비<span class="num">123</span> - <span class="title">주께 가오니</span></div>
-            <div>영성체<span class="num">123</span> - <span class="title">주께 가오니</span></div>
-            <div>파견<span class="num">123</span> - <span class="title">주께 가오니</span></div>
+        <div class="horizontal">
+            <h3>연중</h3>
+            <button type="button" class="btn btn-secondary" id="ordinarySeasonBtn"><span></span></button>
+        </div>
+        
+        <div class="season-div" id="section-ordinary">
+            <div>
+                <strong class="type">입당&nbsp;:&nbsp;</strong>
+                <span class="num">123</span> - 
+                <span class="title">주께 가오니</span>
+            </div>
+            <div>
+                <strong class="type">예물준비&nbsp;:&nbsp;</strong>
+                <span class="num">123</span> - 
+                <span class="title">주께 가오니</span>
+            </div>
+            <div>
+                <strong class="type">영성체&nbsp;:&nbsp;</strong>
+                <span class="num">286</span> - 
+                <span class="title">이 시간 너의 맘 속에</span>
+            </div>
+            <div>
+                <strong class="type">파견&nbsp;:&nbsp;</strong>
+                <span class="num">679</span> - 
+                <span class="title">찬양하라 주님의 이름을</span>
+            </div>
         </div>
     </section>
 
@@ -222,6 +260,72 @@
         });
 
         ordinaryTimeBtn.click();
+
+
+//새 연중시기 곡 데이터 입력 - S
+
+        const ordinarySeasonBtn = document.getElementById('ordinarySeasonBtn');
+        ordinarySeasonBtn.addEventListener("click", () => {
+            
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', './src/data/mid-high-song-list.json', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+
+                    
+                    // console.log(response.중고등부[0]); //연중시기 곡 모음
+                    // console.log(response.중고등부[0].전례시기); //연중시기 곡 모음
+                    // console.log(response.중고등부[0].입당); //연중시기 곡 모음
+                    
+                    
+                    const entryLength = response.중고등부[0].입당.length;
+                    const prepareLength = response.중고등부[0].예물준비.length;
+                    const communionLength = response.중고등부[0].영성체.length;
+                    const dispatchLength = response.중고등부[0].파견.length;
+
+                    // 0 ~ 각 성가 Length 중에서 무작위 숫자를 선택해서 화면에 성가 번호를 뿌려준다.
+                    var randomNumber1 = Math.floor(Math.random() * (entryLength)); // 0 이상 (entryLength) 미만
+                    var randomNumber2 = Math.floor(Math.random() * (prepareLength)); // 0 이상 (prepareLength) 미만
+                    var randomNumber3 = Math.floor(Math.random() * (communionLength)); // 0 이상 (communionLength) 미만
+                    var randomNumber4 = Math.floor(Math.random() * (dispatchLength)); // 0 이상 (dispatchLength) 미만
+                    
+                    //입당 성가
+                    const number1 = response.중고등부[0].입당[randomNumber1].번호;
+                    const title1 = response.중고등부[0].입당[randomNumber1].제목;
+
+                    //예물준비 성가
+                    const number2 = response.중고등부[0].예물준비[randomNumber2].번호;
+                    const title2 = response.중고등부[0].예물준비[randomNumber2].제목;
+
+                    //영성체 성가
+                    const number3 = response.중고등부[0].영성체[randomNumber3].번호;
+                    const title3 = response.중고등부[0].영성체[randomNumber3].제목;
+
+                    //파견 성가
+                    const number4 = response.중고등부[0].파견[randomNumber4].번호;
+                    const title4 = response.중고등부[0].파견[randomNumber4].제목;
+                    
+                    let songNumbers = [number1,number2,number3,number4];
+                    let songTitles = [title1,title2, title3, title4];
+
+                    //section-ordinary 를 선택
+                    let ordinaryDiv = document.getElementById('section-ordinary');
+                    //내부 div 요소를 가져온다.
+                    let innerDiv = ordinaryDiv.getElementsByTagName('div');
+                    for(let i = 0; i < innerDiv.length; i ++){
+                        console.log(innerDiv[0]);
+                        innerDiv[i].querySelector('.num').textContent = songNumbers[i];
+                        innerDiv[i].querySelector('.title').textContent = songTitles[i];
+                    }
+
+                }
+            };
+            xhr.send();
+            
+        });
+
+        ordinarySeasonBtn.click();
     };
     
 </script>
