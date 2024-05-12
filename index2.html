@@ -40,6 +40,13 @@
       box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
       
     }
+
+    .weather {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 10px;
+    }
 </style>
 <head>
     <meta charset="UTF-8">
@@ -72,7 +79,17 @@
             마태 <cite title="Source Title">21,31</cite>
             </figcaption>
         </figure>
+
+        <!--날씨영역 S -->
+        <div class="weather">
+            <h5>오늘의 날씨</h5>
+            <h6>최고기온 : 25 도</h6>
+            <h6>최저기온 : 13 도</h6>
+        </div>
+        <!--날씨영역 E -->
     </div>
+
+    
 
     <div>
         <header class="horizontal">
